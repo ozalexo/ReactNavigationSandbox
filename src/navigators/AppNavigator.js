@@ -1,26 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStackNavigator } from 'react-navigation';
+import { createSwitchNavigator } from 'react-navigation';
 import {
   reduxifyNavigator,
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers';
 
-import LoginScreen from '../components/LoginScreen';
-import MainScreen from '../components/MainScreen';
-import ProfileScreen from '../components/ProfileScreen';
+import { LoginNavigator } from './LoginNavigator'
+import { WalletNavigator } from './WalletNavigator'
 
-const middleware = createReactNavigationReduxMiddleware(
+const rootMiddleware = createReactNavigationReduxMiddleware(
   'root',
   state => state.nav
 );
 
-const RootNavigator = createStackNavigator({
-  Login: { screen: LoginScreen },
-  Main: { screen: MainScreen },
-  Profile: { screen: ProfileScreen },
-});
+const RootNavigator = createSwitchNavigator(
+  {
+    Login: LoginNavigator,
+    Wallet: WalletNavigator
+  },
+  {
+    initialRouteName: 'Login'
+  }
+);
 
 const AppWithNavigationState = reduxifyNavigator(RootNavigator, 'root');
 
@@ -30,4 +33,4 @@ const mapStateToProps = state => ({
 
 const AppNavigator = connect(mapStateToProps)(AppWithNavigationState);
 
-export { RootNavigator, AppNavigator, middleware };
+export { RootNavigator, AppNavigator, rootMiddleware };
