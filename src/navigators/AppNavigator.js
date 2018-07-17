@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import {
   reduxifyNavigator,
   createReactNavigationReduxMiddleware,
@@ -16,11 +16,27 @@ const middleware = createReactNavigationReduxMiddleware(
   state => state.nav
 );
 
-const RootNavigator = createStackNavigator({
-  Login: { screen: LoginScreen },
+const Log = createStackNavigator({
+  Login: { screen: LoginScreen }
+});
+
+const Wal = createStackNavigator({
   Main: { screen: MainScreen },
   Profile: { screen: ProfileScreen },
 });
+
+const RootNavigator = createSwitchNavigator(
+  {
+    Log,
+    Wal
+  }
+)
+
+// const RootNavigator = createStackNavigator({
+//   Login: { screen: LoginScreen },
+//   Main: { screen: MainScreen },
+//   Profile: { screen: ProfileScreen },
+// });
 
 const AppWithNavigationState = reduxifyNavigator(RootNavigator, 'root');
 
